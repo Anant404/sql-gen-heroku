@@ -1,0 +1,290 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <!-- CSS only -->
+    <link crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css"
+          integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" rel="stylesheet">
+
+    <!-- JavaScript Bundle with Popper -->
+    <script crossorigin="anonymous"
+            integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0"
+            src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js"></script>
+
+</head>
+
+<body>
+<div class="border">
+    <h1>
+        SQL
+        <small class="text-muted">Generator</small>
+    </h1>
+    <br>
+
+    <div class="row">
+        <div class="col">
+
+
+            <form action="/join">
+                <p> Choose the Table from the dropdown below</p>
+                <select class="form-control" id="singleSelectValueDDjQuery" name="tablenameselected">
+                    <option disabled hidden selected value="">Choose Table...</option>
+                    <option value="actor">actor</option>
+                    <option value="category">category</option>
+                    <option value="city">city</option>
+                    <option value="country">country</option>
+                    <option value="film_actor">film_actor</option>
+                    <option value="film_category">film_category</option>
+                </select>
+
+
+                <br>
+                <p> Choose the type of Join</p>
+                <select class="form-control" id="join" name="joinmethod">
+                    <option disabled hidden selected value="">Choose Join Method...</option>
+                    <option value="Inner Join">Inner Join</option>
+                    <option value="Outer Join">Outer Join</option>
+                    <option value="Left Join">Left Join</option>
+                    <option value="Right Join ">Right Join</option>
+                </select>
+
+
+        </div>
+        <div class="col">
+
+            <p> Choose the Primary Key from the dropdown below</p>
+            <select class="form-control" id="primary_key" name="pk">
+                <option disabled hidden selected value="">Choose Primary Key...</option>
+            </select>
+            <br>
+            <div class="input-group">
+                <span class="input-group-text">Your SQL query</span>
+                <textarea , aria-label="With textarea" class="form-control" id="sure"></textarea>
+            </div>
+
+            <textarea class="form-group1" id="column12" name="columnselected" rows="3"></textarea>
+            <input type="submit" value="Next">
+
+            </form>
+        </div>
+    </div>
+
+    <br>
+    <p> Select the checkboxes next to the column names to include the column in your query after choosing the table </p>
+
+    <table class="table table-striped table-dark" id="table">
+        <thead>
+        <tr id="row0">
+
+            <th>Column 1</th>
+            <th>Column 2</th>
+            <th>Column 3</th>
+            <th>Column 4</th>
+        </tr>
+        </thead>
+        <tbody id="table">
+        <tr id="row1">
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr id="row2">
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        <tr id="row3">
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+
+        <tr id="row4">
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+
+        <tr id="row5">
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        </tbody>
+    </table>
+
+
+    <script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
+
+
+    <script type="text/javascript">
+
+         $("#singleSelectValueDDjQuery").on("change",function(){
+        //Getting Value
+        var selValue = $("#singleSelectValueDDjQuery").val();
+        //Setting Value
+
+
+
+         $.ajax({
+            type: 'POST',
+            url: '/say_what',
+            dataType: 'json',
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify(selValue),
+
+            success: function(callback1) {
+                console.log(callback1);
+                // Watch out for Cross Site Scripting security issues when setting dynamic content!
+                $("#sure1").text(callback1.columnlist);
+
+                 $('#row0').html('');
+
+                 for (i in callback1.columnlist){
+                 $("#row0").append('<th><input  type="checkbox" value = \x22'+ callback1.columnlist[i] +'\x22 class="form-check-label" id=\x22defaultCheck' +i + '\x22' +'><label class="form-check-label"  for=\x22defaultCheck'+ i+ '\x22>' + callback1.columnlist[i]+ '</label></th>');
+                 };
+                $('#row1').html('');
+                for (i in callback1.data1[0]){
+
+
+                    $("#row1").append('<td>' +callback1.data1[0][i]+'</td>'); };
+
+                $('#row2').html('');
+                for (i in callback1.data1[1]){
+                      $("#row2").append('<td>' +callback1.data1[1][i]+'</td>'); };
+
+
+                $('#row3').html('');
+                for (i in callback1.data1[2]){
+                      $("#row3").append('<td>' +callback1.data1[2][i]+'</td>'); };
+
+                $('#row4').html('');
+                for (i in callback1.data1[3]){
+                      $("#row4").append('<td>' +callback1.data1[3][i]+'</td>'); };
+
+                 $('#row5').html('');
+                for (i in callback1.data1[4]){
+                      $("#row5").append('<td>' +callback1.data1[4][i]+'</td>'); };
+
+              },
+            error: function() {
+                $(this).html("error!");
+            }
+          });
+          });
+
+    </script>
+
+
+    <script type="text/javascript">
+          //update the query box when the checkboxes are changed
+          $( "#row0" ).on( "click", "th", function( event ){
+          //Getting Value
+          var count = $("#row0").children().length;
+          $("#sure").text("");
+          console.log("ok");
+          var table_name = $("#singleSelectValueDDjQuery").val();
+          //Setting Value
+           arr = []
+           for (var i = 0; i < count; i++) {
+	       // TODO
+
+           if ($('#defaultCheck' + i).is(":checked"))
+           {
+          var label = $("#defaultCheck" + i).val();
+          var label1 = table_name + "." + label;
+          arr.push(label1)
+          };
+          var table_name = $("#singleSelectValueDDjQuery").val();
+          $("#sure").text( 'select ' +arr +' from ' + table_name);
+          $("#column12").text('')
+           $("#column12").text(arr)
+          }
+          });
+
+    </script>
+
+    <script type="text/javascript">
+          $("#singleSelectValueDDjQuery").on("change",function(){
+          //Getting Value
+          var count = $("#row0").children().length;
+          $("#sure").text("");
+          console.log("ok");
+
+          //Setting Value
+          arr = []
+          for (var i = 0; i < count; i++) {
+	      // TODO
+
+          if ($('#defaultCheck' + i).is(":checked"))
+          {
+           var label = $("#defaultCheck" + i).val();
+           var label1 = table_name + "." + label;
+           arr.push(label1)
+
+           };
+           var table_name = $("#singleSelectValueDDjQuery").val();
+           $("#sure").text( ' ');
+           $("#sure").text( 'select *' +' from ' + table_name);
+           }
+           });
+
+    </script>
+
+    <script type="text/javascript">
+
+         $("#singleSelectValueDDjQuery").on("change",function(){
+        //Getting Value
+        var selValue = $("#singleSelectValueDDjQuery").val();
+        //Setting Value
+
+
+
+         $.ajax({
+            type: 'POST',
+            url: '/say_column',
+            dataType: 'json',
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify(selValue),
+
+            success: function(callback1) {
+                console.log(callback1);
+                // Watch out for Cross Site Scripting security issues when setting dynamic content!
+
+                 var table_name = $("#singleSelectValueDDjQuery").val();
+                 $('#primary_key').html('');
+                 $('#primary_key').append('<option value="" disabled selected hidden>Choose Primary Key...</option>')
+                 for (i in callback1.columnlist){
+                 $("#primary_key").append('<option value=\x22' + table_name + '.' + callback1.columnlist[i] + '\x22>' + callback1.columnlist[i]+'</option>');
+                 };
+
+
+              },
+            error: function() {
+                $(this).html("error!");
+            }
+          });
+          });
+
+    </script>
+
+
+    <style>
+        .displaynone { display : none }  .form-group1{ display:none }
+         .border {
+
+     padding: 14px;
+    }
+
+    </style>
+
+    <div class="displaynone" id="fld1">Product Name</div>
+    <div class="displaynone" id="fld2">123 $</div>
+    <div class="displaynone" id="fld3">Catalog</div>
+</div>
+</body>
+</html>
