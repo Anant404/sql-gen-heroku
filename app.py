@@ -1,16 +1,24 @@
 from flask import Flask, render_template, request, jsonify
 import psycopg2
 
-try:
-    conn1 = psycopg2.connect(database="dvdrental", user="postgres", password="loseyourself",
-                            host="localhost")
 
-    conn = psycopg2.connect(database="d5u109emjosvrq", user="nvxofslbxssifl", password="c1331e187831ccad38ff2225f26f36d7e213fdd5616330f5fa28babbafdf3ab1",
-                            host="ec2-54-155-226-153.eu-west-1.compute.amazonaws.com")
-    print("connected")
+import urllib.parse as urlparse
+import os
 
-except:
-    print("unable to connect")
+url = urlparse.urlparse(os.environ.get('DATABASE_URL'))
+dbname = url.path[1:]
+user = url.username
+password = url.password
+host = url.hostname
+port = url.port
+
+conn = psycopg2.connect(
+            dbname=dbname,
+            user=user,
+            password=password,
+            host=host,
+            port=port
+            )
 
 mycursor = conn.cursor()
 app = Flask(__name__)
